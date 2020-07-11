@@ -11,10 +11,12 @@ class Transaction < ApplicationRecord
   private
 
   def send_to_service
-    PaymentServiceJob.perform_later(payload: self.as_json)
+    serialized_transaction = TransactionSerializer.new(self).as_json(include: '**')
+    PaymentServiceJob.perform_later(payload: serialized_transaction)
   end
 
   def assign_transaction_id
+    return self if transaction_id
     transaction_id = SecureRandom.hex
     self
   end
