@@ -19,7 +19,12 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.7'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+
+# Necessary for EventBridge connections
 gem 'aws-sdk', '~> 3'
+
+# ActiveJob adapter
+gem 'delayed_job_active_record'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
