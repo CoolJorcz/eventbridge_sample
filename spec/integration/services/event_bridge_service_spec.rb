@@ -5,13 +5,16 @@ describe EventBridgeService, :integration do
     # TODO: Attach localstack to prove out EventBridge connection
     let!(:transaction){ FactoryBot.build(:transaction) }
     let(:serialized_transaction){ TransactionSerializer.new(transaction)}
+
     it 'sends an event to the EventBridge' do
       expect(PaymentServiceJob).to receive(:perform_later) do |payload|
         PaymentServiceJob.perform_now(payload)
       end
+
       expect_any_instance_of(described_class).to receive(:call)
                                              .with(detail: serialized_transaction.as_json, 
-                                                   detail_type: 'payment_service')
+                                                   detail_type: 'payment_service').and_call_original
+      # expect_any_instance_of(Aws::Client::EventBridge).to receive(:put_events).with(hash_including(detail))
       transaction.save
     end
   end
