@@ -1,4 +1,4 @@
-# README
+# Bookstore and Transaction Service
 
 Sample EventBridge connection.
 
