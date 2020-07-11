@@ -27,8 +27,10 @@ ActiveRecord::Schema.define(version: 2020_07_11_043732) do
     t.datetime "purchase_date", default: -> { "CURRENT_TIMESTAMP" }
     t.bigint "transaction_id", null: false
     t.string "customer_email", null: false
+    t.bigint "book_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["book_id"], name: "index_transactions_on_book_id"
   end
 
 end

@@ -1,5 +1,11 @@
-require 'rails_helper'
+describe Book, type: :model do
+  
+  describe 'associations' do
+    it { is_expected.to have_many(:transactions).dependent(:destroy) }
+  end
 
-RSpec.describe Book, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'validations' do
+    it { is_expected.to validate_presence_of(:author) }
+    it { is_expected.to validate_presence_of(:title) }
+  end
 end
