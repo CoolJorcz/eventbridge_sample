@@ -1,17 +1,17 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "books/index", type: :view do
   before(:each) do
     assign(:books, [
-      Book.create!(
-        title: "MyText",
-        author: "Author"
-      ),
-      Book.create!(
-        title: "MyText",
-        author: "Author"
-      )
-    ])
+             Book.create!(
+               title: "MyText",
+               author: "Author",
+             ),
+             Book.create!(
+               title: "MyText",
+               author: "Author",
+             ),
+           ])
   end
 
   it "renders a list of books" do

@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_11_174339) do
-
+ActiveRecord::Schema.define(version: 20_200_711_174_339) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -35,7 +34,7 @@ ActiveRecord::Schema.define(version: 2020_07_11_174339) do
     t.string "queue"
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+    t.index %w[priority run_at], name: "delayed_jobs_priority"
   end
 
   create_table "transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -47,5 +46,4 @@ ActiveRecord::Schema.define(version: 2020_07_11_174339) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["book_id"], name: "index_transactions_on_book_id"
   end
-
 end
