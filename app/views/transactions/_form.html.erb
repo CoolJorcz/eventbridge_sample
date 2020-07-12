@@ -12,13 +12,18 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :title %>
-    <%= form.text_area :title %>
+    <%= form.label :customer_email %>
+    <%= form.text_field :customer_email %>
   </div>
 
   <div class="field">
-    <%= form.label :author %>
-    <%= form.text_field :author %>
+    <%= form.label :sale_price %>
+    <%= form.text_field :sale_price %>
+  </div>
+
+  <div class="field">
+    <%= form.label :book_title %>
+    <%= form.collection_select(:book_id, Book.all, :id, :title_and_author, prompt: true) %>
   </div>
 
   <div class="actions">

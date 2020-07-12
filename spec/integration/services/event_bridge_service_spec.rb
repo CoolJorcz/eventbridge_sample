@@ -3,7 +3,7 @@ require 'rails_helper'
 describe EventBridgeService, :integration do
   describe 'Transaction creation to EventBridge' do
     # TODO: Attach localstack to prove out EventBridge connection
-    let!(:transaction){ FactoryBot.build(:transaction) }
+    let!(:transaction){ FactoryBot.create(:transaction) }
     let(:serialized_transaction){ TransactionSerializer.new(transaction)}
 
     it 'sends an event to the EventBridge' do

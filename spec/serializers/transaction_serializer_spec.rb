@@ -4,7 +4,7 @@ describe TransactionSerializer do
 
   it 'creates the expected hashed fields of the transaction' do
     expected_transaction = {
-      transaction_id: transaction.transaction_id,
+      id: transaction.id,
       customer_email: transaction.customer_email,
       sale_price: transaction.sale_price,
       book: {

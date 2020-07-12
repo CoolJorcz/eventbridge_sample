@@ -2,7 +2,7 @@
 
 <p>
   <strong>Price:</strong>
-  <%= @transaction.price %>
+  <%= @transaction.sale_price %>
 </p>
 
 <p>
@@ -12,7 +12,12 @@
 
 <p>
   <strong>Transaction ID:</strong>
-  <%= @transaction.customer_email %>
+  <%= @transaction.transaction_id %>
+</p>
+
+<p>
+  <strong>Book</strong>
+  <%= @transaction.book.book_title_and_author %>
 </p>
 
 <%= link_to 'Edit', edit_transaction_path(@transaction) %> |
