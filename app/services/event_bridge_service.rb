@@ -11,7 +11,7 @@ class EventBridgeService
   def call(detail:, detail_type:)
     event_payload = craft_event(detail, detail_type)
     resp = client.put_events(entries: [event_payload])
-    
+
     if resp.entries.any?(&:error_code)
       resp.entries.each do |entry|
         Rails.logger.error("EventBridge error code: #{entry.error_code}, message: #{entry.error_message}")

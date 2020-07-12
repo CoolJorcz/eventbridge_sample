@@ -13,9 +13,10 @@
 ActiveRecord::Schema.define(version: 2020_07_11_174339) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "books", force: :cascade do |t|
+  create_table "books", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "title"
     t.string "author"
     t.datetime "created_at", precision: 6, null: false
@@ -37,12 +38,11 @@ ActiveRecord::Schema.define(version: 2020_07_11_174339) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "transactions", force: :cascade do |t|
+  create_table "transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "sale_price", null: false
     t.datetime "purchase_date", default: -> { "CURRENT_TIMESTAMP" }
-    t.bigint "transaction_id", null: false
     t.string "customer_email", null: false
-    t.bigint "book_id", null: false
+    t.uuid "book_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["book_id"], name: "index_transactions_on_book_id"

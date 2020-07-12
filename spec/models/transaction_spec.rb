@@ -10,8 +10,6 @@ describe Transaction, type: :model do
   
   describe 'validations' do
     it { is_expected.to validate_presence_of(:customer_email) }  
-    it { is_expected.to validate_presence_of(:transaction_id) }
-    it { is_expected.to validate_uniqueness_of(:transaction_id) }
     it { is_expected.to validate_presence_of(:sale_price) }
   end
 end
