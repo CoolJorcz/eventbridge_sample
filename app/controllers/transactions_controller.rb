@@ -24,6 +24,7 @@ class TransactionsController < ApplicationController
   # POST /transactions
   # POST /transactions.json
   def create
+    binding.pry
     @transaction = Transaction.new(transaction_params)
 
     respond_to do |format|
@@ -69,7 +70,7 @@ class TransactionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def transaction_params
-      params.require(:transaction).permit(:transaction_id, :book_id, :customer_email, :sale_price)
+      params.require(:transaction).permit(:book_id, :book, :customer_email, :sale_price)
     end
 
 end

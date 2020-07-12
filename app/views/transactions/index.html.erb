@@ -18,7 +18,7 @@
   <tbody>
     <% @transactions.each do |transaction| %>
       <tr>
-        <td><%= transaction.transaction_id %></td>
+        <td><%= transaction.id %></td>
         <td><%= Money.new(transaction.sale_price) %></td>
         <td><%= transaction.book.author %></td>
          <td><%= transaction.book.title %></td>

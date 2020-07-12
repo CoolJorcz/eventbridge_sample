@@ -1,6 +1,6 @@
 class Transaction < ApplicationRecord
   belongs_to :book
-  accepts_nested_attributes_for :book
+
   validates :customer_email, presence: true
   validates :sale_price, presence: true
 
