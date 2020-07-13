@@ -30,7 +30,10 @@ gem "delayed_job_active_record"
 gem "active_model_serializers", "~> 0.10.0"
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
-
+#
+# Add linting and security checks
+gem "rubocop", require: false
+gem 'brakeman', require: false
 # Money gem
 gem "money"
 # Reduces boot times through caching; required in config/boot.rb
@@ -42,7 +45,6 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "pry"
   gem "rspec-rails", "~> 4.0.1"
-  gem "rubocop", require: false
 end
 
 group :development do
