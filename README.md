@@ -11,11 +11,15 @@ For my details, see article on [Medium](https://medium.com)
   Postgres
 
 * Configuration
-  In order to use, make sure the following environment variables are set.
+  In order to use this for any good, make sure the following environment variables are set.
   - `AWS_ACCESS_KEY_ID`
   - `AWS_SECRET_ACCESS_KEY`
   Or whatever IAM policy you use to connect to your AWS account.
 
+* Quick Start
+```
+bin/setup
+```
 * Database creation
   ```rake db:setup``` 
   or 
