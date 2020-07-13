@@ -27,7 +27,26 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7
+    - name: Install library for postgres
+      run: sudo apt-get install libpq-dev
+    - name: Setup Database
+      run: |
+        cp config/YOUR_GITHUB_ACTIONS_DATABASE.yml config/database.yml
+        bundle exec rails db:setup
+      env:
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_USER: postgres
+        RAILS_ENV: test
     - name: Install dependencies
       run: bundle install
     - name: Run tests
       run: bundle exec rake
+services:
+  postgres:
+    image: postgres:12
+      env:
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_USER: postgres
+      options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      ports:
+        - 5432:5432
