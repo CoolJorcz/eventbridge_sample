@@ -4,7 +4,10 @@
 # documentation.
 # This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
 # For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
-
+env:
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  RAILS_ENV: test
 name: Ruby
 
 on:
@@ -15,9 +18,17 @@ on:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - 5432:5432
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
@@ -29,24 +40,22 @@ jobs:
         ruby-version: 2.7
     - name: Install library for postgres
       run: sudo apt-get install libpq-dev
-    - name: Setup Database
-      run: |
-        cp config/YOUR_GITHUB_ACTIONS_DATABASE.yml config/database.yml
-        bundle exec rails db:setup
-      env:
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_USER: postgres
-        RAILS_ENV: test
     - name: Install dependencies
       run: bundle install
+    - name: Setup Database
+      run: |
+        cp config/github_actions_database.yml config/database.yml
+        bundle exec rake db:setup 
+      env:
+        POSTGRES_USER: ${{ env.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        RAILS_ENV: ${{ env.RAILS_ENV }}
+    - name: Setup Asset Dependencies
+      run: |
+        bundle exec rake yarn:install
+        bundle exec rake webpacker:compile
     - name: Run tests
       run: bundle exec rake
-services:
-  postgres:
-    image: postgres:12
       env:
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_USER: postgres
-      options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-      ports:
-        - 5432:5432
+        POSTGRES_USER: ${{ env.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
