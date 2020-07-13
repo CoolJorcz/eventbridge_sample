@@ -4,7 +4,7 @@ class EventBridgeService
   def initialize(options: default_options)
     @options = options
     @client = Aws::EventBridge::Client.new(
-      region: @options[:region]
+      region: @options[:region],
     )
   end
 
@@ -14,25 +14,26 @@ class EventBridgeService
 
     if resp.entries.any?(&:error_code)
       resp.entries.each do |entry|
-        Rails.logger.error("EventBridge error code: #{entry.error_code}, message: #{entry.error_message}")
+        error_code = "EventBridge error code: #{entry.error_code}, message: #{entry.error_message}"
+        Rails.logger.error(error_code)
       end
 
       return
     end
 
     { event_ids: resp.entries.map(&:event_id) }
-  rescue => err
-    Rails.logger.error("EventBridge error: #{err}")
+  rescue StandardError => e
+    Rails.logger.error("EventBridge error: #{e}")
   end
 
   def craft_event(detail, detail_type)
     {
       time: Time.zone.now.to_s,
       source: options[:source],
-      resources: [''],
+      resources: [""],
       event_bus_name: options[:event_bus_name],
       detail: detail,
-      detail_type: detail_type
+      detail_type: detail_type,
     }
   end
 
@@ -41,10 +42,10 @@ class EventBridgeService
   attr_reader :source
 
   def default_options
-    { 
-      region: 'us-west-2',
-      event_bus_name: 'default', 
-      source: 'bookstore-us-west-2'
+    {
+      region: "us-west-2",
+      event_bus_name: "default",
+      source: "bookstore-us-west-2",
     }
   end
 end

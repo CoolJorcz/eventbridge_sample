@@ -6,12 +6,10 @@ class Transaction < ApplicationRecord
 
   after_save :send_to_service
 
-
   private
 
   def send_to_service
-    serialized_transaction = TransactionSerializer.new(self).as_json(include: '**')
+    serialized_transaction = TransactionSerializer.new(self).as_json(include: "**")
     PaymentServiceJob.perform_later(payload: serialized_transaction)
   end
-
 end
