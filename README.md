@@ -2,7 +2,7 @@
 
 Sample EventBridge connection.
 
-For my details, see article on [Medium](https://medium.com)
+For more details, see article on [Medium](https://medium.com)
 
 * Ruby version
   2.7
