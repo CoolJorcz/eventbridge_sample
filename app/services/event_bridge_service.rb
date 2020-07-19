@@ -1,5 +1,5 @@
 class EventBridgeService
-  attr_reader :options, :client
+  attr_reader :options
 
   def initialize(options: default_options)
     @options = options
@@ -9,24 +9,30 @@ class EventBridgeService
   end
 
   def call(detail:, detail_type:)
-    event_payload = craft_event(detail, detail_type)
+    event_payload = define_event_hash(detail, detail_type)
     resp = client.put_events(entries: [event_payload])
+    { events: resp.data.entries } if resp.data.failed_entry_count.zero?
 
-    if resp.entries.any?(&:error_code)
-      resp.entries.each do |entry|
-        error_code = "EventBridge error code: #{entry.error_code}, message: #{entry.error_message}"
-        Rails.logger.error(error_code)
-      end
-
-      return
-    end
-
-    { event_ids: resp.entries.map(&:event_id) }
-  rescue StandardError => e
-    Rails.logger.error("EventBridge error: #{e}")
+    check_errors(resp.data.entries)
   end
 
-  def craft_event(detail, detail_type)
+  def check_errors(eventbridge_events)
+    event_arr = []
+
+    eventbridge_events.each do |entry|
+      if entry.error_code.nil?
+        event_arr << entry
+        next
+      end
+      error_msg = "AWS events error code: #{entry.error_code}, message: #{entry.error_message}"
+      Rails.logger.error(error_msg)
+      event_arr << entry
+    end
+
+    { events: event_arr }
+  end
+
+  def define_event_hash(detail, detail_type)
     {
       time: Time.zone.now.to_s,
       source: options[:source],
@@ -39,13 +45,13 @@ class EventBridgeService
 
   private
 
-  attr_reader :source
+  attr_reader :client
 
   def default_options
     {
       region: "us-west-2",
       event_bus_name: "default",
-      source: "bookstore-us-west-2",
+      source: "bookstore",
     }
   end
 end
